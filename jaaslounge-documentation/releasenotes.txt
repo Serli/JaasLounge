@@ -1,0 +1,90 @@
+Release Name: 0.3.0
+
+Notes:
+Description : third JaasLounge release.
+
+Content : JAAS LDAP login module (Active Directory), JAAS NTLM login module, JAAS Mapper login module.
+
+Changes: 
+General :
+New login module : LDAP login module. This module allows authentication against Active Directory.
+
+----------------------------------------------------------------------------
+
+Release Name: 0.2.0
+
+Notes:
+Description : second JaasLounge release.
+
+Content : JAAS NTLM login module, JAAS Mapper login module.
+
+Changes: 
+General :
+Refactoring of user and group management (same classes for all login modules)
+
+MapperLoginModule :
+This is a new login module.
+
+NtlmLoginModule :
+Bug fixes :
+- some PDC do not need valid password to retrieve group information, which caused successful authentication without a valid password : this has been fixed by explicit login.
+Following classes have been removed :
+org.jaaslounge.ntlm.NtlmGroupPrincipal
+org.jaaslounge.ntlm.NtlmUserPrincipal
+
+----------------------------------------------------------------------------
+
+Release Name: 0.1.0
+
+Notes:
+Description : this is the first JaasLounge release.
+
+Content : JAAS NTLM login module.
+
+Requirements : the following library are needed in the classpath :
+a) jcifs-1.1.8.jar from JCIFS project 
+http://jcifs.samba.org/
+
+b) jcifs-ext-0.9.4 from JCIFS-ext project
+http://sourceforge.net/projects/jcifs-ext/
+
+Usage : the module authenticates a given username/password on a domain controler via NTLM protocol. If the user exists, the groups of the user are returned as roles (e.g. Domain Users, Domain Admins).
+The user principal class is org.jaaslounge.ntlm.NtlmUserPrincipal.
+The role class is
+org.jaaslounge.ntlm.NtlmGroupPrincipal.
+
+For general information see JAAS API official documentation.
+
+Web-apps : refer to the documentation of your server. Put jaaslounge-ntlm, jcifs and jcifs-ext jars in the correct classpath.
+
+Example of login module configuration for Tomcat 5.0.x server :
+jaas.config :
+NT_Realm {
+   com.serli.jaas.ntlm.NtlmLoginModule required 
+   debug=true 
+   mode=tomcat
+   domain=MYDOMAIN    
+   host=192.168.0.1;
+};
+
+security descriptor (<myapp>.xml or server.xml) :
+<Realm className="org.apache.catalina.realm.JAASRealm" appName="NT_Realm" roleClassNames="org.jaaslounge.ntlm.NtlmGroupPrincipal" userClassNames="org.jaaslounge.ntlm.NtlmUserPrincipal" debug="99" useContextClassLoader="false" /> 
+
+Example of login module configuration for JBoss 3.2.x server :
+<application-policy name="web-console">
+  <authentication>
+    <login-module code="org.jaaslounge.NtlmLoginModule" flag="required">
+    <module-option name="debug">true</module-option> 
+    <module-option name="mode">JBoss</module-option>
+    <module-option name="domain">MYDOMAIN</module-option> 
+    <module-option name="host">192.168.0.1</module-option> 
+  </authentication>
+</application-policy>
+
+Known bugs and limitations :
+- users without password cannot be authenticated.
+- this release has only been tested on a Samba server.
+
+Changes: 
+none (first release !)
+

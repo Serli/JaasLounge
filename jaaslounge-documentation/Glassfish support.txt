@@ -1,0 +1,34 @@
+How to use Jaaslounge with Glassfish server :
+
+- add the Jaaslounge jar, and related jars if needed (jcifs etc) in a directory in the domain (eg <domain>/lib/secure)
+
+- add the following lines in <domain>/config/login.conf file :
+jaasloungeRealm {
+	org.jaaslounge.adapters.glassfish.JaasloungeLoginModule required;
+};
+
+- edit <domain>/config/server.policy file and add the following lines :
+// jaaslounge get all permissions
+grant codeBase "file:${com.sun.aas.instanceRoot}/lib/secure/-" {
+	permission java.security.AllPermission;
+};
+
+- start glassfish
+
+- go to the admin console
+http://<server host>:4848/
+
+- go to the application server / jvm settings / path settings pane and add the jars in <domain>/lib/secure in the classpath suffix
+
+- in the application server / security / realms page add a realm (with the name specified in your application deployment descriptor) :
+class name = org.jaaslounge.adapters.glassfish.JaasloungeRealm
+
+- set the options for the realm :
+jaas-context = jaasloungeRealm
+jaaslounge-module = <classname of the jaaslounge login module you want tu use for this realm>
+
+- set the specific options for the jaaslounge login module the same way as realm options
+
+- restart glassfish
+
+
