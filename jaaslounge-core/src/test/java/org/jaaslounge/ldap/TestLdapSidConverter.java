@@ -25,7 +25,7 @@ public class TestLdapSidConverter extends TestCase {
         System.setProperty("javax.security.auth.useSubjectCredsOnly", "false");
 
         base = "DC=ex2003,DC=com";
-        converter = new LdapSidConverter("ldap://testad2003:389", base, "600000");
+        converter = new LdapSidConverter("ldap://testad2003:389", base, 600000);
 
         validSids = new ArrayList<String>();
         for(int i = 0; i < 8; i++) {

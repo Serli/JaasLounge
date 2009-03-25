@@ -1,8 +1,10 @@
 package org.jaaslounge.ldap;
 
-import javax.naming.Context;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.naming.NamingEnumeration;
-import javax.naming.directory.DirContext;
+import javax.naming.NamingException;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
@@ -14,13 +16,15 @@ import org.junit.Test;
 
 public class TestLdapConnection extends TestCase {
 
+    private static final String LDAP_PROVIDER_URL = "ldap://testad2003:389";
     private String base;
     private String query;
     private SearchControls searchCtls;
-    private LdapConnection connection;
+    private KeepAliveLdapConnection connection;
 
     @Before
     protected void setUp() throws Exception {
+        System.out.println();
         String path = this.getClass().getClassLoader().getResource("krb5.login.conf").toExternalForm();
         System.setProperty("java.security.auth.login.config", path.replace("%20", " "));
         System.setProperty("java.security.krb5.realm", "EX2003.COM"); 
@@ -33,35 +37,39 @@ public class TestLdapConnection extends TestCase {
         searchCtls.setReturningAttributes(new String[]{"sAMAccountName"});
         searchCtls.setSearchScope(SearchControls.SUBTREE_SCOPE);
 
-        connection = LdapConnection.getInstance();
-        connection.setProviderUrl("ldap://testad2003:389");
-        connection.addToEnvironnement(Context.SECURITY_AUTHENTICATION, "GSSAPI");
     }
 
     @Test
     public void testSameConnection() throws GSSException {
-        NamingEnumeration<SearchResult> names;
+        NamingEnumeration<SearchResult> names = null;
 
-        connection.setTimeout(600000);
+        connection = KeepAliveLdapConnection.getConnection(LDAP_PROVIDER_URL, 2000, null);
 
-        names = connection.search(base, query, searchCtls);
-        DirContext context1 = connection.getContext();
+        try {
+            names = connection.search(base, query, searchCtls);
+        } catch(NamingException e) {
+            fail();
+        }
         assertTrue(names.hasMoreElements());
 
-        names = connection.search(base, query, searchCtls);
-        DirContext context2 = connection.getContext();
+        try {
+            names = connection.search(base, query, searchCtls);
+        } catch(NamingException e) {
+            fail();
+        }
         assertTrue(names.hasMoreElements());
-
-        assertSame(context1, context2);
     }
 
     public void testTimeoutConnection() {
-        NamingEnumeration<SearchResult> names;
+        NamingEnumeration<SearchResult> names = null;
 
-        connection.setTimeout(1000);
+        connection = KeepAliveLdapConnection.getConnection(LDAP_PROVIDER_URL, 1000, null);
 
-        names = connection.search(base, query, searchCtls);
-        DirContext context1 = connection.getContext();
+        try {
+            names = connection.search(base, query, searchCtls);
+        } catch(NamingException e) {
+            fail();
+        }
         assertTrue(names.hasMoreElements());
 
         try {
@@ -71,30 +79,73 @@ public class TestLdapConnection extends TestCase {
             fail(e.getMessage());
         }
 
-        names = connection.search(base, query, searchCtls);
-        DirContext context2 = connection.getContext();
+        try {
+            names = connection.search(base, query, searchCtls);
+        } catch(NamingException e) {
+            fail();
+        }
         assertTrue(names.hasMoreElements());
-
-        assertNotSame(context1, context2);
     }
 
-    public void testSeveralConnection() {
-        NamingEnumeration<SearchResult> names;
+    public void testSeveralConnections() {
+        NamingEnumeration<SearchResult> names = null;
 
-        connection.setTimeout(10);
+        connection = KeepAliveLdapConnection.getConnection(LDAP_PROVIDER_URL, 10, null);
 
-        names = connection.search(base, query, searchCtls);
-        DirContext context1 = connection.getContext();
+        try {
+            names = connection.search(base, query, searchCtls);
+        } catch(NamingException e) {
+            fail();
+        }
         assertTrue(names.hasMoreElements());
 
         int count = 0;
-        while(count < 10) {
+        while(count < 1000) {
             count++;
-            names = connection.search(base, query, searchCtls);
+            try {
+                names = connection.search(base, query, searchCtls);
+            } catch(Exception e) {
+                fail();
+            }
             assertTrue(names.hasMoreElements());
         }
-        DirContext context2 = connection.getContext();
+    }
 
-        assertNotSame(context1, context2);
+    public void testSimultaneousConnections() {
+        connection = KeepAliveLdapConnection.getConnection(LDAP_PROVIDER_URL, 1000, null);
+        
+        List<Thread> threads = new ArrayList<Thread>();
+        int count = 0;
+        while(count < 10) {
+            count++;
+
+            Thread thread = new Thread(){
+                @Override
+                public void run() {
+                    NamingEnumeration<SearchResult> names = null;
+                    int count = 0;
+                    while(count < 100) {
+                        count++;
+                        try {
+                            names = connection.search(base, query, searchCtls);
+                            assertTrue(names.hasMoreElements());
+                        } catch (Exception e) {
+                            fail();
+                        }
+                        assertTrue(names.hasMoreElements());
+                    }
+                }
+            };
+            threads.add(thread);
+            thread.start();
+        }
+        
+        for(Thread thread : threads) {
+            try {
+                thread.join();
+            } catch(InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
