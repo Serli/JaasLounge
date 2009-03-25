@@ -4,6 +4,9 @@ import org.jaaslounge.decoding.DecodingException;
 
 public abstract class SpnegoToken {
 
+    // Default max size as 65K
+    public static int TOKEN_MAX_SIZE = 66560;
+
     protected byte[] mechanismToken;
     protected byte[] mechanismList;
     protected String mechanism;

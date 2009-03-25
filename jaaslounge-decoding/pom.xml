@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jaaslounge</groupId>
   <artifactId>jaaslounge-decoding</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.2</version>
 	<dependencies>
 		<dependency>
 			<groupId>bouncycastle</groupId>
