@@ -4,7 +4,7 @@
 	<groupId>org.jaaslounge</groupId>
 	<artifactId>jaaslounge-core</artifactId>
 	<name>JaasLounge basis classes</name>
-	<version>0.5.1</version>
+	<version>0.5.2</version>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
