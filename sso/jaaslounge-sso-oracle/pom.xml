@@ -1,21 +1,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.jaaslounge.sso</groupId>
+	<parent>
+		<groupId>org.jaaslounge.sso</groupId>
+		<artifactId>jaaslounge-sso</artifactId>
+		<version>1.1.0-SNAPSHOT</version>
+	</parent>
 	<artifactId>jaaslounge-sso-oracle</artifactId>
-	<name>JaasLounge SSO for Oracle Application Server using Active Directory</name>
-	<version>0.4.3</version>
-	<description />
+	<name>JaasLounge SSO for Oracle Application Server against Kerberos</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.jaaslounge</groupId>
-			<artifactId>jaaslounge-core</artifactId>
-			<version>0.5.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jaaslounge</groupId>
 			<artifactId>jaaslounge-decoding</artifactId>
-			<version>0.1.2</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.oracle.security.jazn</groupId>
@@ -45,34 +42,19 @@
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-kerberos-shared</artifactId>
 			<version>1.5.4</version>
-			<type>jar</type>
-			<scope>compile</scope>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-core-unit</artifactId>
 			<version>1.5.4</version>
-			<type>jar</type>
-			<scope>compile</scope>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.directory.server</groupId>
 			<artifactId>apacheds-server-unit</artifactId>
 			<version>1.5.4</version>
-			<type>jar</type>
-			<scope>compile</scope>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>
