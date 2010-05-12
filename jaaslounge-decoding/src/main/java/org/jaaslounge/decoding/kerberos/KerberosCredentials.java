@@ -15,7 +15,7 @@ public class KerberosCredentials {
     private Subject subject;
 
     public KerberosCredentials() throws LoginException {
-        this("com.sun.security.jgss.accept");
+        this(System.getProperty("jaaslounge.sso.jaas.config"));
     }
 
     public KerberosCredentials(String loginContextName) throws LoginException {

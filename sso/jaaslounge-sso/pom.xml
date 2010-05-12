@@ -20,5 +20,6 @@
 		<module>../jaaslounge-sso-oracle</module>
 		<module>../jaaslounge-sso-tomcat</module>
 		<module>../jaaslounge-sso-websphere</module>
+		<module>../jaaslounge-sso-weblogic</module>
 	</modules>
 </project>
