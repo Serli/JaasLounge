@@ -1,0 +1,82 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.jaaslounge.sso</groupId>
+	<artifactId>jaaslounge-sso-weblogic</artifactId>
+	<packaging>jar</packaging>
+	<version>0.1.0</version>
+	<name>JaasLounge SSO for Weblogic Server using Active Directory</name>
+	<dependencies>
+		<dependency>
+			<groupId>org.jaaslounge</groupId>
+			<artifactId>jaaslounge-core</artifactId>
+			<version>0.5.3</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jaaslounge</groupId>
+			<artifactId>jaaslounge-decoding</artifactId>
+			<version>0.1.3</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>weblogic</groupId>
+			<artifactId>weblogic</artifactId>
+			<version>10.3.0</version>
+			<scope>system</scope>
+			<systemPath>C:/bea/wlserver_10.3/server/lib/weblogic.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>weblogic</groupId>
+			<artifactId>wlManagementMBean</artifactId>
+			<version>10.3.0</version>
+			<scope>system</scope>
+			<systemPath>C:/bea/wlserver_10.3/server/lib/mbeantypes/wlManagementMBean.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>sun.jdk</groupId>
+			<artifactId>tools</artifactId>
+			<version>1.6.0</version>
+			<scope>system</scope>
+			<systemPath>C:/Program Files/Java/jdk1.6.0_15/lib/tools.jar</systemPath>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<configuration>
+							<tasks>
+								<mkdir dir="${project.build.directory}/mbeans/" />
+								<java classname="weblogic.management.commo.WebLogicMBeanMaker"
+									fork="true" failonerror="true">
+									<jvmarg
+										line="-Dfiles=${project.build.sourceDirectory}
+                    						-DMJF=${project.build.directory}/mbeans/jaaslounge-sso-weblogic-${project.version}.jar" />
+									<classpath>
+										<path refid="maven.compile.classpath" />
+									</classpath>
+								</java>
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

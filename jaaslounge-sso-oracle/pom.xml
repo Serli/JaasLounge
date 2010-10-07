@@ -4,18 +4,18 @@
 	<groupId>org.jaaslounge.sso</groupId>
 	<artifactId>jaaslounge-sso-oracle</artifactId>
 	<name>JaasLounge SSO for Oracle Application Server using Active Directory</name>
-	<version>0.4.3</version>
+	<version>0.4.4</version>
 	<description />
 	<dependencies>
 		<dependency>
 			<groupId>org.jaaslounge</groupId>
 			<artifactId>jaaslounge-core</artifactId>
-			<version>0.5.2</version>
+			<version>0.5.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jaaslounge</groupId>
 			<artifactId>jaaslounge-decoding</artifactId>
-			<version>0.1.2</version>
+			<version>0.1.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.oracle.security.jazn</groupId>

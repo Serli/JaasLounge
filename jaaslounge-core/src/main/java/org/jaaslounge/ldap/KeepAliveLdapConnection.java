@@ -34,7 +34,7 @@ public class KeepAliveLdapConnection {
         environnement.put(Context.SECURITY_AUTHENTICATION, "GSSAPI");
         environnement.put("javax.security.auth.useSubjectCredsOnly", "false");
         try {
-            LoginContext lc = new LoginContext("com.sun.security.jgss.accept");
+            LoginContext lc = new LoginContext(System.getProperty("jaaslounge.sso.jaas.config"));
             lc.login();
             subject = lc.getSubject();
         } catch(LoginException e) {
@@ -56,7 +56,6 @@ public class KeepAliveLdapConnection {
         return instance;
     }
 
-    @SuppressWarnings("unchecked")
     public synchronized NamingEnumeration<SearchResult> search(final String base,
             final String filter, final SearchControls controls) throws NamingException {
         NamingEnumeration<SearchResult> result = null;

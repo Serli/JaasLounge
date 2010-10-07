@@ -4,15 +4,15 @@
 	<groupId>org.jaaslounge</groupId>
 	<artifactId>jaaslounge-core</artifactId>
 	<name>JaasLounge basis classes</name>
-	<version>0.5.2</version>
+	<version>0.5.3</version>
 	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.0</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 	<build>
 		<plugins>
 			<plugin>
