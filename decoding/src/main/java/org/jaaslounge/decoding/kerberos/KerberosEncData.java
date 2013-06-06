@@ -17,6 +17,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.bouncycastle.asn1.ASN1InputStream;
+import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.ASN1TaggedObject;
 import org.bouncycastle.asn1.DERApplicationSpecific;
 import org.bouncycastle.asn1.DERGeneralString;
@@ -47,9 +48,9 @@ public class KerberosEncData {
         }
 
         stream = new ASN1InputStream(new ByteArrayInputStream(derToken.getContents()));
-        DERSequence sequence;
+        ASN1Sequence sequence;
         try {
-            sequence = DecodingUtil.as(DERSequence.class, stream);
+            sequence = DecodingUtil.as(ASN1Sequence.class, stream);
             stream.close();
         } catch(IOException e) {
             throw new DecodingException("kerberos.ticket.malformed", null, e);
